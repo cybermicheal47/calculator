@@ -1,86 +1,139 @@
-//addition
-function add(a, b) {
-    return a + b;
-  }
+let operator = '';
+let previousvalue ='';
+let currentvalue = '';
+//these are three global variables we are going to try to maniuplate it
 
+
+
+
+
+document.addEventListener("DOMContentLoaded", function(){
+  //store all components on html in our js
+
+let clear = document.querySelector(".data-del");
+let equal = document.querySelector(".span-equal");
+let decimal = document.querySelector(".decimal");
+
+let numbers = document.querySelectorAll(".data-number");
+let operators = this.querySelectorAll(".data-operation");
+
+let previousscreen = document.querySelector( ".previous-operand");
+let currentscreen =  document.querySelector(".current-operand");
+
+ numbers.forEach((number)=> number.addEventListener("click",function(e) { 
+  handlenumber(e.target.textContent)
+currentscreen.textContent = currentvalue
+
+
+ 
+
+
+
+ }   )    )
+
+
+
+ operators.forEach((op)=> op.addEventListener("click",function(e) {
+  handleoperator(e.target.textContent)
+
+  previousscreen.textContent = previousvalue + " " + operator;
+  currentscreen.textContent = currentvalue;
+
+
+
+
+}   )    )
+
+clear.addEventListener("click",function(){
+  previousvalue = '';
+  currentvalue = '';
+  operator = '';
+  previousscreen.textContent = currentvalue;
+  currentscreen.textContent = currentvalue;
+}
+)
+
+equal.addEventListener("click", function(){
+
+ if (currentvalue !='' && previousvalue != ''){
   
-  //subtraction
-  function subtract(a, b) {
-    return a - b;
-  }
+  calculate()
+previousscreen.textContent = '';
+currentscreen.textContent = previousvalue;
+ }
 
+
+})
+
+decimal.addEventListener("click", function(){
+  adddecimal();
+})
+
+
+
+})
+
+
+
+function handlenumber(num){
+
+
+if (currentvalue.length <= 6){
+ currentvalue += num;
+}
+
+
+}
+
+
+function handleoperator(op){
+  operator = op;
+  previousvalue = currentvalue;
+  currentvalue = '';
+}
+
+
+
+function calculate(){
+  previousvalue = Number(previousvalue);
+  currentvalue = Number(currentvalue);
+
+  if (operator=== "+"){
+    previousvalue += currentvalue;
   
-  //multiplication
-
-  function multiply(a, b) {
-    return a * b;
-  }
-
+  } else if (operator=== "-"){
+    previousvalue -= currentvalue;
   
-  //Division
-
-  function divide(a, b) {
-    if (b === 0) {
-      console.error("Error: Division by zero");
-      return;
+  } else if (operator=== "÷"){
+    if (currentvalue === 0) {
+      return "Error: Cannot divide by zero";
+    } else {
+      previousvalue /= currentvalue;
     }
-    return a / b;
-  }
-
   
-
-  console.log(add(5, 3)); // Output: 8
-console.log(subtract(10, 7)); // Output: 3
-console.log(multiply(4, 6)); // Output: 24
-console.log(divide(10, 2)); // Output: 5
-console.log(divide(8, 0)); // Output: Error: Division by zero
-
-
-
-// Variable for the first number
-let firstNumber = 3;
-
-// Variable for the operator
-let operator = "+";
-
-// Variable for the second number
-let secondNumber = 5;
-
-
-
-function operate(operator, num, num2) {
-switch (operator){
-    case "+":
-        return add (num,num2);
-    case "-":
-     return subtract (num,num2);
-     case '*':
-        return multiply(num, num2);
-      case '/':
-        return divide(num, num2);
-
-    default:
-    console.error("operator not found")
-    return null;
-
-
-}
-
-}
-
-console.log(operate('+', 3, 5)); // Output: 8 (3 + 5)
-console.log(operate('-', 10, 7)); // Output: 3 (10 - 7)
-
-
-
-window.onload = function () {
-  let screen  = document.getElementById('screen'),
-      keypad  = document.getElementById('functions-one'),
-      buttons = keypad.getElementsByTagName('button');
-  for (let i = 0; i < buttons.length; i++) {
-      buttons[i].onclick = function () {
-          screen.value = screen.value + this.innerHTML;
-          return false;
-      };
+  } else if (operator=== "*"){
+    previousvalue *= currentvalue;
+  
+  } else {
+    return "Error: Invalid operator";
   }
-};
+previousvalue = roundnumber(previousvalue);
+previousvalue = previousvalue.toString();
+currentvalue = previousvalue.toString();
+
+
+}
+
+
+
+function roundnumber(num){
+  return Math.round(num * 1000) / 1000;
+}
+
+
+
+function adddecimal(){
+  if (!currentvalue.includes(".")){
+    currentvalue += '.';
+  }
+}
